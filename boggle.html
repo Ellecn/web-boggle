@@ -1,0 +1,156 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Boggle</title>
+  <style>
+  * { font-family:Helvetica; text-align: center; }
+  table { margin: auto; }
+  td { border: 1px solid black;
+       font-size: 70pt;
+       text-align: center;
+       width: 120px;
+       height: 120px;
+  }
+  h1 { font-size: 40pt;
+       font-weight: strong;
+       margin-bottom: 4px;
+  }
+  a {
+    text-decoration: none;
+    color: black;
+    border: 1px solid black;
+    font-size: 30pt;
+    background-color: #EEEEEE;
+    padding: 4px;
+    border-radius: 3px;
+  }
+  #progress {
+    width: 100%;
+    background-color: #DDDDDD;
+  }
+  #countdown {
+    background-color: green;
+    height: 40px;
+    width: 0%;
+  }
+  </style>
+</head>
+<body>
+  <table id="game" onClick="javascript:showTable()">
+    <tr>
+      <td id="field1"></td>
+      <td id="field2"></td>
+      <td id="field3"></td>
+      <td id="field4"></td>
+    </tr>
+    <tr>
+      <td id="field5"></td>
+      <td id="field6"></td>
+      <td id="field7"></td>
+      <td id="field8"></td>
+    </tr>
+    <tr>
+      <td id="field9"></td>
+      <td id="field10"></td>
+      <td id="field11"></td>
+      <td id="field12"></td>
+    </tr>
+    <tr>
+      <td id="field13"></td>
+      <td id="field14"></td>
+      <td id="field15"></td>
+      <td id="field16"></td>
+    </tr>
+  </table>
+  <br />
+  <div id="progress">
+    <div id="countdown"></div>
+  </div>
+  <br />
+  Rundenlänge: <input id="txtRoundLength" type="text" value="180" style="width:80px"/> Sekunden (Standard: 180)
+  <br /><br />
+  <a href="javascript:startRound()">Neue Runde</a>
+  <script>
+    var roundLength = 180;
+    var dice = [
+      ['D','P','E','C','A','M'],
+      ['T','A','I','O','A','E'],
+      ['L','U','R','I','E','W'],
+      ['M','O','I','A','S','R'],
+      ['J','M','O','Q','A','B'],
+      ['E','U','T','K','O','N'],
+      ['L','R','A','T','I','B'],
+      ['E','T','P','L','S','U'],
+      ['E','L','S','R','C','A'],
+      ['O','X','R','A','F','I'],
+      ['E','Z','N','D','V','A'],
+      ['E','E','F','H','I','S'],
+      ['N','H','E','S','I','R'],
+      ['T','G','I','N','E','V'],
+      ['S','O','N','E','D','T'],
+      ['N','E','Y','U','G','L']
+    ];
+
+    var fields = [];
+    for(var i = 0; i < 16; i++){
+       fields.push(document.getElementById("field" + (i+1)));
+    }
+
+    var timer;
+
+    resetTimer();
+
+    function startRound(){
+      roundLength = document.getElementById("txtRoundLength").value;
+      resetTimer();
+      shuffleArray(dice);
+      showTable();
+
+      for(var i = 0; i < 16; i++){
+        fields[i].innerHTML = dice[i][rollD6() - 1];
+      }
+
+      timer = setInterval(tick, 1000);
+    }
+
+    // Randomize array in place (Durstenfeld-Algo)
+    function shuffleArray(array){
+      for(var i = array.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    function rollD6(){
+      return Math.floor(Math.random() * 6) + 1;
+    }
+
+    var time = 0;
+    function tick(){
+      if(time == roundLength){
+        hideTable();
+        clearInterval(timer);
+      }else{
+        time++;
+      }
+      document.getElementById("countdown").style.width = (time*100/roundLength) + "%";
+    }
+    
+    function resetTimer(){
+      clearInterval(timer);
+      time = 0;
+      document.getElementById("countdown").style.width = "0%";
+    }
+
+    function hideTable(){
+      document.getElementById("game").style.background = "black";
+    }
+
+    function showTable(){
+      document.getElementById("game").style.background = "white";
+    }
+  </script>
+</body>
+</html>
