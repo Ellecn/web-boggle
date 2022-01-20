@@ -1,3 +1,3 @@
 # web-boggle
 
-Quick and dirty web version of the game 'Boggle' (created summer 2020).
+Quick and dirty web version of the game 'Boggle' (created in summer 2021).
